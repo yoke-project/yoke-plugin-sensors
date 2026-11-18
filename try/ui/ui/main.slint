@@ -1,0 +1,108 @@
+import { Button, ListView, Palette } from "std-widgets.slint";
+
+export struct SensorRow {
+    id:     string,
+    name:   string,
+    kind:   string,
+    // The value and its unit, or a dash and why it could not be read.
+    value:  string,
+    limits: string,
+    // Empty for a kind with no threshold.
+    level:  string,
+    // The alarm attributes the kernel raised, if any.
+    alarm:  string,
+}
+
+component Info inherits Text {
+    color: Palette.foreground.transparentize(0.45);
+    font-size: 12px;
+    vertical-alignment: center;
+}
+
+export component MainWindow inherits Window {
+    title: "Sensors";
+    preferred-width: 820px;
+    preferred-height: 620px;
+
+    in property <string> attached_to;
+    in-out property <string> message: "Starting...";
+    in property <string> summary;
+    in property <string> reading;
+
+    in property <[SensorRow]> sensors;
+    in property <[string]> events;
+
+    callback clear_events();
+
+    VerticalLayout {
+        padding: 10px;
+        spacing: 10px;
+
+        HorizontalLayout {
+            spacing: 10px;
+            Text { text: root.message; font-weight: 700; vertical-alignment: center; wrap: word-wrap; horizontal-stretch: 1; }
+            Info { text: root.attached_to; }
+        }
+        HorizontalLayout {
+            spacing: 10px;
+            Info { text: root.summary; wrap: word-wrap; horizontal-stretch: 1; }
+            Info { text: root.reading; }
+        }
+
+        Text { text: "Sensors"; font-weight: 600; }
+        ListView {
+            vertical-stretch: 1;
+            for d in root.sensors : Rectangle {
+                height: 42px;
+                background: d.level == "critical" ? #d3333330 : d.level == "high" ? #e8a02030 : transparent;
+                HorizontalLayout {
+                    padding-left: 8px; padding-right: 8px; spacing: 12px;
+                    VerticalLayout {
+                        horizontal-stretch: 1;
+                        alignment: center;
+                        Text { text: d.name; overflow: elide; }
+                        Info { text: d.id + "  ·  " + d.kind; overflow: elide; }
+                    }
+                    Text {
+                        text: d.value;
+                        width: 150px;
+                        horizontal-alignment: right;
+                        vertical-alignment: center;
+                        font-weight: 600;
+                        overflow: elide;
+                    }
+                    VerticalLayout {
+                        width: 200px;
+                        alignment: center;
+                        Info { text: d.limits; overflow: elide; }
+                        Info {
+                            text: d.alarm != "" ? "alarm: " + d.alarm : d.level;
+                            color: d.alarm != "" || d.level == "critical" ? #d33 : d.level == "high" ? #e8a020 : Palette.foreground.transparentize(0.45);
+                            overflow: elide;
+                        }
+                    }
+                }
+            }
+        }
+
+        Text { text: "Events"; font-weight: 600; }
+        HorizontalLayout {
+            spacing: 8px;
+            ListView {
+                height: 130px;
+                horizontal-stretch: 1;
+                for line in root.events : Text {
+                    text: line;
+                    font-family: "monospace";
+                    font-size: 12px;
+                    height: 18px;
+                    overflow: elide;
+                }
+            }
+            VerticalLayout {
+                alignment: start;
+                Button { text: "Clear"; clicked => { root.clear_events(); } }
+            }
+        }
+    }
+}

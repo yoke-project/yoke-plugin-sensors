@@ -1,0 +1,16 @@
+model: 1
+id: com.yoke.sensors-try
+version: 0.1.0
+arch: x86_64
+core: ">=0.15.0"
+units:
+  sensors:
+    kind: plugin
+    plugin: com.yoke.sensors
+    exec: components/plugins/sensors
+    args: ["--interval-ms", "2000", "--for-seconds", "10"]
+    digest: sha256:1de9008639955046bb1cd474c91735afee736a88a3a1268a648e985a7e62fc73
+channels:
+  panel:
+    transport: local
+    clients: single

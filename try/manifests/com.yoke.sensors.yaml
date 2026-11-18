@@ -1,0 +1,40 @@
+manifest: 1
+id: com.yoke.sensors
+protocol: 1
+streams:
+  - id: sensors.readings
+    tolerates_loss: true
+queries:
+  - id: sensors.snapshot
+  - id: sensors.history
+occurrences:
+  - id: sensors.threshold.high
+  - id: sensors.threshold.critical
+  - id: sensors.threshold.cleared
+  - id: sensors.alarm
+  - id: sensors.trip
+capabilities:
+  - name: query.sensors.snapshot.answer
+    governs:
+      query: sensors.snapshot
+  - name: query.sensors.history.answer
+    governs:
+      query: sensors.history
+  - name: stream.sensors.readings.publish
+    governs:
+      stream: sensors.readings
+  - name: event.sensors.threshold.high.report
+    governs:
+      occurrence: sensors.threshold.high
+  - name: event.sensors.threshold.critical.report
+    governs:
+      occurrence: sensors.threshold.critical
+  - name: event.sensors.threshold.cleared.report
+    governs:
+      occurrence: sensors.threshold.cleared
+  - name: event.sensors.alarm.report
+    governs:
+      occurrence: sensors.alarm
+  - name: event.sensors.trip.report
+    governs:
+      occurrence: sensors.trip

@@ -1,0 +1,9 @@
+plugin: 1
+id: com.yoke.sensors
+language: rust
+program: sensors
+manifest: plugin/com.yoke.sensors.yaml
+build:
+  in: plugin/
+  run: cargo build --release --target "$YOKE_RUST_TARGET" && cp "target/$YOKE_RUST_TARGET/release/sensors" "$YOKE_OUT/sensors"
+architectures: [x86_64, aarch64]

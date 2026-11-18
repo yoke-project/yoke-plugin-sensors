@@ -1,0 +1,15 @@
+# The application's follower: an interface client that asks the unit's questions, follows its streams and
+# its events, and prints each as one line. It is the application's, not the Plugin's.
+[package]
+name = "follow"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "time", "signal"] }
+yoke-sdk = "=0.8.0"
+# What a subscription carries, which the library does not name.
+yoke-proto = "=0.6.0"
+
+[workspace]

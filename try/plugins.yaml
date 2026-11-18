@@ -1,0 +1,8 @@
+plugins:
+  - id: com.yoke.sensors
+    unit: sensors
+    source: ..
+    tag: null
+    arch: x86_64
+    digest: sha256:1ce77dfc91a1c6a7719040dc2f014f7571e862e228670902134f910df6177efb
+    taken: 2026-11-17T22:15:57Z
